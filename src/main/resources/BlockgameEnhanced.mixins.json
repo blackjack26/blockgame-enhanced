@@ -16,7 +16,6 @@
     "gui.MixinDrawContext",
     "gui.hud.MixinBossBarHud",
     "gui.hud.MixinInGameHud",
-    "gui.screen.MixinChatScreen",
     "gui.screen.MixinDeathScreen",
     "gui.screen.MixinGameMenuScreen",
     "gui.screen.MixinGenericContainerScreen",

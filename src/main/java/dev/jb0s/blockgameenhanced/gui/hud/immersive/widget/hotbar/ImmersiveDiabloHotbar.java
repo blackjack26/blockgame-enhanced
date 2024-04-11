@@ -163,7 +163,6 @@ public class ImmersiveDiabloHotbar extends ImmersiveWidget {
                 healthVal = String.valueOf((int) calc);
             }
 
-            RenderSystem.enableBlend();
             int centerX = x + 16;
             int centerY = y + 16;
             int txtWidth = textRenderer.getWidth(healthVal);
@@ -171,7 +170,6 @@ public class ImmersiveDiabloHotbar extends ImmersiveWidget {
 
             context.drawText(textRenderer, healthVal, (int) (centerX - (txtWidth / 2.f) + 2), (int) (centerY - (txtHeight / 2.f) + 1), 0x55000000, false);
             context.drawText(textRenderer, healthVal, (int) (centerX - (txtWidth / 2.f) + 1), (int) (centerY - (txtHeight / 2.f)), 0xFFFFFF, false);
-            RenderSystem.disableBlend();
             resetShaders();
         }
 
@@ -199,7 +197,6 @@ public class ImmersiveDiabloHotbar extends ImmersiveWidget {
             TextRenderer textRenderer = getInGameHud().getTextRenderer();
             String healthVal = String.valueOf((int) vehicle.getHealth());
 
-            RenderSystem.enableBlend();
             int centerX = x + 16;
             int centerY = y + 16;
             int txtWidth = textRenderer.getWidth(healthVal);
@@ -208,7 +205,6 @@ public class ImmersiveDiabloHotbar extends ImmersiveWidget {
             // this will be good eventually
             context.drawText(textRenderer, healthVal, (int) (centerX - (txtWidth / 2.f)), (int) (centerY - (txtHeight / 2.f) + 1), 0x55000000, false);
             context.drawText(textRenderer, healthVal, (int) (centerX - (txtWidth / 2.f) - 1), (int) (centerY - (txtHeight / 2.f)), 0xFFFFFF, false);
-            RenderSystem.disableBlend();
             resetShaders();
         }
 
@@ -228,16 +224,11 @@ public class ImmersiveDiabloHotbar extends ImmersiveWidget {
         getInGameHud().client.getProfiler().push("hungerMeter");
 
         // calculate shite
-        float hungerPercent = (float) hunger / 20;
-
-        // If there is an actionbar message, we are not receiving MMO data. Use vanilla data instead to avoid hitches in HUD
-        if(getInGameHud().overlayMessage != null && getInGameHud().overlayRemaining > 0) {
-            hungerPercent = player.getHungerManager().getFoodLevel() / 20.f;
-        }
-
+        float hungerPercent = player.getHungerManager().getFoodLevel() / 20.f;
         int gaugeHeight = (int) (32.f * hungerPercent);
         int yOffset = 32 - gaugeHeight;
 
+        // Draw gauge
         if(player.hasStatusEffect(StatusEffects.HUNGER)) {
             // Hunger
             drawTexture(context, x, y + yOffset, 15, 163 + yOffset, 15, gaugeHeight);
@@ -247,12 +238,12 @@ public class ImmersiveDiabloHotbar extends ImmersiveWidget {
             drawTexture(context, x, y + yOffset, 0, 163 + yOffset, 15, gaugeHeight);
         }
 
+        // Draw hunger value
         IngameHudConfig ighConfig = BlockgameEnhanced.getConfig().getIngameHudConfig();
         if(!ighConfig.showAdvancedStats && hungerPercent > 0.0f) {
             TextRenderer textRenderer = getInGameHud().getTextRenderer();
             String hungerVal = String.valueOf(player.getHungerManager().getFoodLevel());
 
-            RenderSystem.enableBlend();
             float centerX = x + 7.5f;
             int centerY = y + 16;
             int txtWidth = textRenderer.getWidth(hungerVal);
@@ -260,7 +251,7 @@ public class ImmersiveDiabloHotbar extends ImmersiveWidget {
 
             context.drawText(textRenderer, hungerVal, (int) (centerX - (txtWidth / 2.f) + 1), (int) (centerY - (txtHeight / 2.f) + 1), 0x55000000, false);
             context.drawText(textRenderer, hungerVal, (int) (centerX - (txtWidth / 2.f)), (int) (centerY - (txtHeight / 2.f)), 0xFFFFFF, false);
-            RenderSystem.disableBlend();
+
             resetShaders();
         }
 
@@ -291,7 +282,6 @@ public class ImmersiveDiabloHotbar extends ImmersiveWidget {
             TextRenderer textRenderer = getInGameHud().getTextRenderer();
             String hydrateVal = String.valueOf((int) hydration);
 
-            RenderSystem.enableBlend();
             int centerX = x + 7;
             int centerY = y + 16;
             int txtWidth = textRenderer.getWidth(hydrateVal);
@@ -299,7 +289,6 @@ public class ImmersiveDiabloHotbar extends ImmersiveWidget {
 
             context.drawText(textRenderer, hydrateVal, (int) (centerX - (txtWidth / 2.f) + 1), (int) (centerY - (txtHeight / 2.f) + 1), 0x55000000, false);
             context.drawText(textRenderer, hydrateVal, (int) (centerX - (txtWidth / 2.f)), (int) (centerY - (txtHeight / 2.f)), 0xFFFFFF, false);
-            RenderSystem.disableBlend();
             resetShaders();
         }
 
@@ -321,10 +310,8 @@ public class ImmersiveDiabloHotbar extends ImmersiveWidget {
             int yOffset = (int)(airPercent * 27.f);
 
             // Draw bottle and air filler
-            RenderSystem.enableBlend();
             drawTexture(context, x, y, 48, 12, 18, 37);
             drawTexture(context, x + 2, y + 8 + yOffset, 66, 20 + yOffset, 14, 27 - yOffset);
-            RenderSystem.disableBlend();
 
             getInGameHud().client.getProfiler().pop();
         }
