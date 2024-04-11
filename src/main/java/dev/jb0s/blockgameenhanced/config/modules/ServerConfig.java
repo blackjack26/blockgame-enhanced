@@ -12,7 +12,7 @@ public class ServerConfig implements ConfigData {
   public boolean enableResourcePackPrompt;
 
   public ServerConfig() {
-    enableResourcePackPrompt = true;
+    enableResourcePackPrompt = false;
   }
 
   public static void updateServerInfo(ServerInfo serverInfo) {
