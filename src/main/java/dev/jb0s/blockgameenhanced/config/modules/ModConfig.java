@@ -26,4 +26,8 @@ public class ModConfig extends PartitioningSerializer.GlobalData {
     @Getter
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
     ServerConfig serverConfig = new ServerConfig();
+
+    @Getter
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+    StatConfig statConfig = new StatConfig();
 }

@@ -127,5 +127,8 @@
 	"menu.blockgame.status.online": "There are %s players online:",
 
 	"comment.12": "~~ Misc ~~",
-	"menu.blockgame.container.plunder": "Loot All"
+	"menu.blockgame.container.plunder": "Loot All",
+
+	"comment.13": "~~ Stat Profiles ~~",
+	"menu.blockgame.stats.reallocate": "Click to reallocate your attributes"
 }

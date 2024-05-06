@@ -3,10 +3,32 @@ package dev.jb0s.blockgameenhanced.helper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.shedaniel.math.Rectangle;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ButtonTextures;
+import net.minecraft.client.gui.tooltip.Tooltip;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-public class GUIHelper {
+public final class GUIHelper {
+    public static Identifier sprite(String path) {
+        return new Identifier("blockgame", path);
+    }
+
+    public static TexturedButtonWidget button(int x, int y, String path, String tooltipKey, ButtonWidget.PressAction pressAction) {
+        TexturedButtonWidget button = new TexturedButtonWidget(
+            x,
+            y,
+            12,
+            12,
+            new ButtonTextures(sprite(path + "/button"), sprite(path + "/button_highlighted")),
+            pressAction
+        );
+        button.setTooltip(Tooltip.of(Text.translatable(tooltipKey)));
+        return button;
+    }
+
     /**
      * Draws a 9-slice texture
      *

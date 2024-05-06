@@ -66,7 +66,12 @@ public class MixinClientPlayNetworkHandler {
         NetworkThreadUtils.forceMainThread(packet, thisHandler, MinecraftClient.getInstance());
 
         ActionResult result = ScreenOpenedEvent.EVENT.invoker().screenOpened(packet);
-        if(result != ActionResult.PASS) {
+
+        if (result == ActionResult.CONSUME) {
+            // We have handled the screen opening, so we should cancel the rest of the method. We don't want to close
+            // the screen, so the server still thinks we have it open
+            ci.cancel();
+        } else if (result != ActionResult.PASS) {
             // Send a packet to the server saying we have closed the window, although we never opened it
             CloseHandledScreenC2SPacket pak = new CloseHandledScreenC2SPacket(packet.getSyncId());
             thisHandler.sendPacket(pak);
