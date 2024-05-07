@@ -3,6 +3,7 @@ package dev.jb0s.blockgameenhanced.gui.widget.stats;
 import dev.jb0s.blockgameenhanced.gamefeature.statprofiles.attribute.PlayerAttribute;
 import dev.jb0s.blockgameenhanced.gui.screen.StatScreen;
 import dev.jb0s.blockgameenhanced.gui.widget.ScrollableViewWidget;
+import dev.jb0s.blockgameenhanced.helper.SoundHelper;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.MinecraftClient;
@@ -190,7 +191,7 @@ public class StatListWidget extends ScrollableViewWidget {
 
     for (AttributeWidget widget : this.attributeWidgets) {
       if (widget.mouseClicked(mouseX, mouseY, button)) {
-        this.playDownSound(MinecraftClient.getInstance().getSoundManager());
+        SoundHelper.playDownSound();
         return true;
       }
     }

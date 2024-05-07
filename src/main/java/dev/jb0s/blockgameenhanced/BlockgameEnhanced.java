@@ -1,8 +1,7 @@
 package dev.jb0s.blockgameenhanced;
 
-import dev.jb0s.blockgameenhanced.helper.PathHelper;
-import dev.jb0s.blockgameenhanced.helper.ResourceHelper;
 import dev.jb0s.blockgameenhanced.config.modules.ModConfig;
+import dev.jb0s.blockgameenhanced.helper.ResourceHelper;
 import lombok.Getter;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;

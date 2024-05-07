@@ -6,10 +6,15 @@ import lombok.Getter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -37,6 +42,52 @@ public class PlayerAttribute {
     this.slot = slot;
     this.itemStack = itemStack;
     this.category = determineCategory(name);
+  }
+
+  public PlayerAttribute reset() {
+    return new PlayerAttribute(this.name, this.max, 0, this.buffs, this.cost, this.slot, this.itemStack);
+  }
+
+  public PlayerAttribute adjust(int spentAmount) {
+    if (this.spent + spentAmount < 0 || this.spent + spentAmount > this.max) {
+      return this;
+    }
+
+    return new PlayerAttribute(this.name, this.max, this.spent + spentAmount, this.buffs, this.cost, this.slot, this.itemStack);
+  }
+
+  /**
+   * When in preview mode, the lore text does not correctly display the current spent points, or modifiers. This
+   * method fixes the lore text to display the correct values.
+   */
+  public void fixLoreText() {
+    List<MutableText> loreList = new ArrayList<>();
+
+    loreList.add(Text.literal(""));
+    loreList.add(
+        Text.literal("Points Spent: ")
+            .formatted(Formatting.GRAY)
+            .append(Text.literal("" + this.spent).formatted(Formatting.GOLD))
+            .append(Text.literal("/").formatted(Formatting.GRAY))
+            .append(Text.literal("" + this.max).formatted(Formatting.GOLD))
+    );
+    loreList.add(Text.literal(""));
+    loreList.add(Text.literal("When Leveled Up:").formatted(Formatting.DARK_GRAY));
+
+    for (StatModifier buff : this.buffs) {
+      loreList.add(buff.toLore(this.spent));
+    }
+
+    loreList.add(Text.literal(""));
+    loreList.add(Text.literal("Left-click to level up by  " + this.cost + ".").formatted(Formatting.YELLOW));
+    loreList.add(Text.literal("Right-click to level down by " + this.cost + ".").formatted(Formatting.YELLOW));
+
+    // Remove italics
+    for (MutableText lore : loreList) {
+      lore.styled(style -> style.withItalic(false));
+    }
+
+    itemStack.getOrCreateSubNbt("display").put("Lore", NbtHelper.buildLore(loreList));
   }
 
   public static @Nullable PlayerAttribute fromItem(ItemStack stack, int slot) {
@@ -133,5 +184,17 @@ public class PlayerAttribute {
       case "Tenacity", "Shield Mastery", "Fortress", "Juggernaut", "Beef Cake", "Chunky Soup" -> AttributeCategory.DEFENSE;
       default -> AttributeCategory.OTHER;
     };
+  }
+
+  public PlayerAttribute copy() {
+    return new PlayerAttribute(
+        this.name,
+        this.max,
+        this.spent,
+        new HashSet<>(this.buffs),
+        this.cost,
+        this.slot,
+        this.itemStack.copy()
+    );
   }
 }

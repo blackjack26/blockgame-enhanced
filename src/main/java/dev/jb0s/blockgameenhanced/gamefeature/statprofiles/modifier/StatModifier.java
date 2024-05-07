@@ -1,6 +1,9 @@
 package dev.jb0s.blockgameenhanced.gamefeature.statprofiles.modifier;
 
 import lombok.Getter;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.regex.Pattern;
@@ -21,6 +24,23 @@ public class StatModifier {
     this.playerValue = playerValue;
     this.type = type;
     this.category = determineCategory(name);
+  }
+
+  public MutableText toLore(int count) {
+    double newPlayerValue = value * count;
+    //   +1.0% Critical Strike Chance (+0.5%)
+    return Text.literal("  ").formatted(Formatting.GRAY)
+        .append(value > 0 ? "+" : "")
+        .append(String.format("%.1f", value))
+        .append(type == ModifierType.RELATIVE ? "%" : "")
+        .append(" " + name)
+        .append(" (")
+        .append(Text.literal(newPlayerValue > 0 ? "+" : "")
+            .append(String.format("%.1f", newPlayerValue))
+            .append(type == ModifierType.RELATIVE ? "%" : "")
+            .formatted(playerValue > 0 ? Formatting.GREEN : (playerValue < 0 ? Formatting.RED : Formatting.WHITE))
+        )
+        .append(")");
   }
 
   public static @Nullable StatModifier fromLore(String lore) {

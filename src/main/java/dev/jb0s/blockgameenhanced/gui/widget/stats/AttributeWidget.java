@@ -31,6 +31,10 @@ public class AttributeWidget extends ClickableWidget {
 
     this.parent = parent;
     this.attribute = attribute;
+
+    if (this.parent.getScreen().getScreenManager().getStatAllocator().isPreview()) {
+      this.attribute.fixLoreText();
+    }
   }
 
   @Override
@@ -68,7 +72,12 @@ public class AttributeWidget extends ClickableWidget {
     int filledWidth = (int) ((this.attribute.getSpent() / (double) this.attribute.getMax()) * barWidth);
 
     context.drawTexture(BAR_TEXTURE, barX, barY, 0, 0, barWidth, barHeight, 64, 15);
-    context.drawTexture(BAR_TEXTURE, barX, barY, 0, 5, filledWidth, barHeight, 64, 15);
+
+    int v = 5; // Blue bar
+    if (this.parent.getScreen().getScreenManager().getStatAllocator().isPreview()) {
+      v = 10; // Yellow bar
+    }
+    context.drawTexture(BAR_TEXTURE, barX, barY, 0, v, filledWidth, barHeight, 64, 15);
 
     RenderSystem.disableBlend();
 
@@ -83,14 +92,12 @@ public class AttributeWidget extends ClickableWidget {
       return false;
     }
 
-    this.onClick(mouseX, mouseY);
+    if (button == 0) {
+      this.parent.getScreen().getScreenManager().getStatAllocator().incrementStat(this.attribute);
+    } else if (button == 1) {
+      this.parent.getScreen().getScreenManager().getStatAllocator().decrementStat(this.attribute);
+    }
     return true;
-  }
-
-  @Override
-  public void onClick(double mouseX, double mouseY) {
-    // TODO: This feels wrong, maybe a singleton makes more sense for StatAllocator
-    this.parent.getScreen().getScreenManager().getStatAllocator().incrementStat(this.attribute);
   }
 
   @Override

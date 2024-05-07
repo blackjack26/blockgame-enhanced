@@ -18,6 +18,7 @@ import dev.jb0s.blockgameenhanced.gamefeature.updateprompter.UpdatePrompterGameF
 import dev.jb0s.blockgameenhanced.gamefeature.zone.ZoneGameFeature;
 import dev.jb0s.blockgameenhanced.gamefeature.zoneboss.ZoneBossGameFeature;
 import dev.jb0s.blockgameenhanced.config.ConfigManager;
+import dev.jb0s.blockgameenhanced.storage.Storage;
 import dev.jb0s.blockgameenhanced.update.GitHubRelease;
 import dev.jb0s.blockgameenhanced.update.UpdateManager;
 import lombok.Getter;
@@ -76,6 +77,9 @@ public class BlockgameEnhancedClient implements ClientModInitializer {
         // Load all game features
         parseUserDisabledGameFeatures();
         loadGameFeatures();
+
+        // Load storage
+        Storage.setup();
     }
 
     /**

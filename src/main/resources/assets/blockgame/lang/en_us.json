@@ -111,6 +111,12 @@
 	"text.autoconfig.blockgameenhanced.option.serverConfig.enableResourcePackPrompt": "Enable server resource pack prompt",
 	"text.autoconfig.blockgameenhanced.option.serverConfig.enableResourcePackPrompt.@Tooltip[0]": "Whether to be prompted to install the required resource pack when connecting to the server.",
 	"text.autoconfig.blockgameenhanced.option.serverConfig.enableResourcePackPrompt.@Tooltip[1]": "NOTE: Disabling this means you accept the custom resource pack",
+	"text.autoconfig.blockgameenhanced.option.storageConfig": "Storage",
+	"text.autoconfig.blockgameenhanced.option.storageConfig.backendType": "Storage Type",
+	"text.autoconfig.blockgameenhanced.option.storageConfig.backendType.@Tooltip": "The type of storage to use for the recipe journal.",
+	"text.autoconfig.blockgameenhanced.option.statConfig": "Stat Profiles",
+	"text.autoconfig.blockgameenhanced.option.storageConfig.enableEnhancedStats": "Enable Enhanced Stats",
+	"text.autoconfig.blockgameenhanced.option.storageConfig.enableEnhancedStats.@Tooltip": "Enables the enhanced stat UI which has more detailed information about your stats.",
 
 	"comment.9": "~~ Update Popup ~~",
 	"menu.blockgame.update.header": "Update available",
@@ -130,5 +136,8 @@
 	"menu.blockgame.container.plunder": "Loot All",
 
 	"comment.13": "~~ Stat Profiles ~~",
+	"menu.blockgame.stats.cancel_preview": "Click to cancel attribute changes",
+	"menu.blockgame.stats.change_profile": "Click to change your profile",
+	"menu.blockgame.stats.preview": "Click to preview attribute changes",
 	"menu.blockgame.stats.reallocate": "Click to reallocate your attributes"
 }

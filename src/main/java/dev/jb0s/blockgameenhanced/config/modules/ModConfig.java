@@ -17,6 +17,10 @@ public class ModConfig extends PartitioningSerializer.GlobalData {
 
     @Getter
     @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
+    StatConfig statConfig = new StatConfig();
+
+    @Getter
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
     PrivacyConfig privacyConfig = new PrivacyConfig();
 
     @Getter
@@ -28,6 +32,6 @@ public class ModConfig extends PartitioningSerializer.GlobalData {
     ServerConfig serverConfig = new ServerConfig();
 
     @Getter
-    @ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
-    StatConfig statConfig = new StatConfig();
+    @ConfigEntry.Gui.CollapsibleObject(startExpanded = false)
+    StorageConfig storageConfig = new StorageConfig();
 }

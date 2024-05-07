@@ -5,9 +5,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class NbtHelper {
   public static @Nullable NbtList getLore(ItemStack stack) {
@@ -47,5 +50,13 @@ public class NbtHelper {
       BlockgameEnhanced.LOGGER.warn("Failed to parse lore line: {}", line, e);
       return null;
     }
+  }
+
+  public static NbtList buildLore(List<MutableText> lines) {
+    NbtList lore = new NbtList();
+    for (MutableText line : lines) {
+      lore.add(NbtString.of(Text.Serializer.toJson(line)));
+    }
+    return lore;
   }
 }

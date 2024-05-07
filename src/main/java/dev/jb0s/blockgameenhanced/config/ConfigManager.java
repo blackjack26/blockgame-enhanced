@@ -2,8 +2,8 @@ package dev.jb0s.blockgameenhanced.config;
 
 import dev.jb0s.blockgameenhanced.BlockgameEnhanced;
 import dev.jb0s.blockgameenhanced.BlockgameEnhancedClient;
-import dev.jb0s.blockgameenhanced.helper.PathHelper;
 import dev.jb0s.blockgameenhanced.config.modules.ModConfig;
+import dev.jb0s.blockgameenhanced.helper.FileHelper;
 import lombok.SneakyThrows;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -16,10 +16,9 @@ import net.minecraft.nbt.NbtTagSizeTracker;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class ConfigManager {
-    private static final Path INVENTORY_SNAPSHOT_PATH = Path.of(PathHelper.getBlockgamePath() + "/INVENTORY.dat");
+    private static final Path INVENTORY_SNAPSHOT_PATH = Path.of(FileHelper.getBlockgamePath() + "/INVENTORY.dat");
 
     public ConfigManager() {
         // Register events

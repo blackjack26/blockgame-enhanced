@@ -45,19 +45,7 @@ public final class StatScreenManager {
 
   @Nullable
   private List<ItemStack> receivedInventory;
-
-  /**
-   * The available points to allocate to the player's stats. The value is found by parsing the NBT data of a stat
-   * item. The text at the bottom of the tooltip indicates the number of points available to allocate.
-   */
-  private int availablePoints;
   private boolean shouldParsePoints;
-
-  /**
-   * The number of points spent on the player's stats. This value is found by parsing the NBT data of the reallocation
-   * item. It indicates "You have spent a total of X attributes." where X is the number of points spent.
-   */
-  private int spentPoints;
 
   /**
    * Keeps track of the stat screen state to determine what to do next. This is particularly useful when
@@ -68,15 +56,18 @@ public final class StatScreenManager {
   public StatScreenManager(StatProfileGameFeature gameFeature) {
     this.gameFeature = gameFeature;
     this.statAllocator = new StatAllocator(this);
+    this.statAllocator.setOnAttributesChanged(() -> {
+      if (this.screen != null) {
+        this.screen.onAttributesChanged();
+      }
+    });
 
     this.screen = null;
     this.syncId = -1;
     this.dirtySyncId = true;
     this.receivedInventory = null;
 
-    this.availablePoints = -1;
     this.shouldParsePoints = false;
-    this.spentPoints = -1;
 
     this.state = State.IDLE;
   }
@@ -126,17 +117,14 @@ public final class StatScreenManager {
         attributes.put(attribute.getName(), attribute);
 
         // If we haven't found the current points yet, try to find it
-        if (this.availablePoints == -1 || this.shouldParsePoints) {
-          this.availablePoints = PlayerAttribute.getAvailablePoints(itemStack);
+        if (this.statAllocator.getAvailablePoints() == -1 || this.shouldParsePoints) {
+          this.statAllocator.setAvailablePoints(PlayerAttribute.getAvailablePoints(itemStack));
           this.shouldParsePoints = false;
         }
       }
     }
 
     this.statAllocator.setAttributes(attributes);
-    if (this.screen != null) {
-      this.screen.onAttributesChanged();
-    }
   }
 
   public void onScreenClose() {
@@ -165,14 +153,6 @@ public final class StatScreenManager {
     return this.dirtySyncId || this.syncId == -1 || this.screen == null;
   }
 
-  public int getTotalPoints() {
-    if (this.availablePoints == -1 || this.spentPoints == -1) {
-      return -1;
-    }
-
-    return this.availablePoints + this.spentPoints;
-  }
-
   public void changeState(State state) {
     BlockgameEnhanced.LOGGER.info("Changing state to: {}", state);
     this.state = state;
@@ -196,7 +176,7 @@ public final class StatScreenManager {
       Pattern pattern = Pattern.compile("You have spent a total of (\\d+) attributes\\.");
       var matcher = pattern.matcher(lore);
       if (matcher.matches()) {
-        this.spentPoints = Integer.parseInt(matcher.group(1));
+        this.statAllocator.setSpentPoints(Integer.parseInt(matcher.group(1)));
         return;
       }
     }

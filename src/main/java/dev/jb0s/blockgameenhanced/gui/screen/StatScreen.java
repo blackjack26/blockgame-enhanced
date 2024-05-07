@@ -38,7 +38,11 @@ public class StatScreen extends Screen {
 
   private StatListWidget statListWidget;
   private ModifierListWidget modifierListWidget;
+
   private TexturedButtonWidget reallocateButton;
+  private TexturedButtonWidget previewButton;
+  private TexturedButtonWidget cancelPreviewButton;
+  private TexturedButtonWidget changeProfileButton;
 
   public StatScreen(Text title, StatScreenManager screenManager) {
     super(title);
@@ -88,6 +92,48 @@ public class StatScreen extends Screen {
     this.reallocateButton.visible = this.screenManager.getSyncId() != -1;
     this.addDrawableChild(this.reallocateButton);
 
+    // Preview Button
+    this.previewButton = GUIHelper.button(
+        this.left + MENU_WIDTH - 2 * (3 + BUTTON_SIZE),
+        this.top + 5,
+        "widgets/preview_stats",
+        "menu.blockgame.stats.preview",
+        (button) -> {
+          this.screenManager.getStatAllocator().setPreview(true);
+          this.previewButton.visible = false;
+          this.changeProfileButton.visible = false;
+          this.cancelPreviewButton.visible = true;
+        });
+    this.previewButton.visible = !this.screenManager.getStatAllocator().isPreview();
+    this.addDrawableChild(this.previewButton);
+
+    // Cancel Preview Button
+    this.cancelPreviewButton = GUIHelper.button(
+        this.left + MENU_WIDTH - 2 * (3 + BUTTON_SIZE),
+        this.top + 5,
+        "widgets/remove",
+        "menu.blockgame.stats.cancel_preview",
+        (button) -> {
+          this.screenManager.getStatAllocator().setPreview(false);
+          this.previewButton.visible = true;
+          this.changeProfileButton.visible = true;
+          this.cancelPreviewButton.visible = false;
+        });
+    this.cancelPreviewButton.visible = this.screenManager.getStatAllocator().isPreview();
+    this.addDrawableChild(this.cancelPreviewButton);
+
+    // Change Profile button
+    this.changeProfileButton = GUIHelper.button(
+        this.left + MENU_WIDTH - 3 * (3 + BUTTON_SIZE),
+        this.top + 5,
+        "widgets/change_profile",
+        "menu.blockgame.stats.change_profile",
+        (button) -> {
+          // TODO: Open profile selection
+        });
+    this.changeProfileButton.visible = !this.screenManager.getStatAllocator().isPreview();
+    this.addDrawableChild(this.changeProfileButton);
+
     // Modifier list widget
     this.modifierListWidget = new ModifierListWidget(this, this.left + MENU_WIDTH + 4, this.top, 175, MENU_HEIGHT);
     this.modifierListWidget.visible = false;
@@ -105,13 +151,13 @@ public class StatScreen extends Screen {
     context.drawItem(BOOK_ITEM, this.left + (MENU_WIDTH - 16) / 2, this.top + 8);
 
     // Centered below the book item, "Available X/Y"
-    int totalPoints = this.screenManager.getTotalPoints();
+    int totalPoints = this.screenManager.getStatAllocator().getTotalPoints();
     MutableText text = Text.literal("Available: "); // TODO: translatable
     if (totalPoints == -1) {
       text.append(Text.literal("?").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
     } else {
-      text.append(Text.literal("" + this.screenManager.getAvailablePoints())
-              .formatted(this.screenManager.getAvailablePoints() > 0 ? Formatting.GREEN : Formatting.RED, Formatting.BOLD))
+      text.append(Text.literal("" + this.screenManager.getStatAllocator().getAvailablePoints())
+              .formatted(this.screenManager.getStatAllocator().getAvailablePoints() > 0 ? Formatting.GREEN : Formatting.RED, Formatting.BOLD))
           .append(Text.literal("/" + totalPoints));
     }
     context.drawText(this.textRenderer, text, this.left + (MENU_WIDTH - this.textRenderer.getWidth(text)) / 2, this.top + 25, 0xFFFFFF, false);
