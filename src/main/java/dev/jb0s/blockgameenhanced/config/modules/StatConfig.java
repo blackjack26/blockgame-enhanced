@@ -9,7 +9,11 @@ public class StatConfig implements ConfigData {
   @ConfigEntry.Gui.Tooltip
   public boolean enableEnhancedStats;
 
+  @ConfigEntry.Gui.Tooltip
+  public boolean useOldStatView;
+
   public StatConfig() {
     enableEnhancedStats = true;
+    useOldStatView = false;
   }
 }

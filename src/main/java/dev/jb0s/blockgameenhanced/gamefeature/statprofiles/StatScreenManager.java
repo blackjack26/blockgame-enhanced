@@ -114,7 +114,15 @@ public final class StatScreenManager {
 
       PlayerAttribute attribute = PlayerAttribute.fromItem(itemStack, slot);
       if (attribute != null) {
-        attributes.put(attribute.getName(), attribute);
+        final int finalSlot = slot;
+        attributes.compute(attribute.getName(), (key, value) -> {
+          if (value == null) {
+            return attribute;
+          }
+
+          value.getSlots().add(finalSlot);
+          return value;
+        });
 
         // If we haven't found the current points yet, try to find it
         if (this.statAllocator.getAvailablePoints() == -1 || this.shouldParsePoints) {

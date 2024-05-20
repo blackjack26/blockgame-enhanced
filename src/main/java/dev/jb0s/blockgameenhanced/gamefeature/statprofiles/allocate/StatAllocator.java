@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class StatAllocator {
@@ -75,12 +76,15 @@ public class StatAllocator {
     ReceiveChatMessageEvent.EVENT.register(this::handleReceiveChatMessage);
   }
 
-  public boolean allocate(StatProfile profile) {
-    if (this.isAllocating()) {
+  public boolean allocate(@Nullable StatProfile profile) {
+    if (profile == null || this.isAllocating()) {
       return false;
     }
 
-    this.commandIterator = profile.buildCommands();
+    StatProfile tempProfile = new StatProfile("temp");
+    tempProfile.fromAttributes(this.attributes == null ? new HashMap<>() : this.attributes);
+
+    this.commandIterator = profile.buildCommands(tempProfile);
     this.nextStep();
     return true;
   }
@@ -218,7 +222,7 @@ public class StatAllocator {
     this.screenManager.changeState(StatScreenManager.State.WAITING_FOR_ALLOCATION);
     this.screenManager.invalidateScreen();
 
-    interactionManager.clickSlot(this.screenManager.getSyncId(), attribute.getSlot(), 0, SlotActionType.PICKUP, MinecraftClient.getInstance().player);
+    interactionManager.clickSlot(this.screenManager.getSyncId(), attribute.getFirstSlot(), 0, SlotActionType.PICKUP, MinecraftClient.getInstance().player);
   }
 
   private void previewStatChange(PlayerAttribute attribute, int amount) {
@@ -291,17 +295,33 @@ public class StatAllocator {
   }
 
   public void setPreview(boolean preview) {
+    this.setPreview(preview, null);
+  }
+
+  public void setPreview(boolean preview, @Nullable StatProfile profile) {
     this.preview = preview;
 
     if (this.preview) {
       this.previewAttributes = new HashMap<>();
       if (this.attributes != null) {
         for (Map.Entry<String, PlayerAttribute> entry : this.attributes.entrySet()) {
-          this.previewAttributes.put(entry.getKey(), entry.getValue().copy());
+          PlayerAttribute attribute = entry.getValue().copy();
+
+          if (profile != null) {
+            Integer spent = profile.getAttributeAllocations().get(entry.getKey());
+            if (spent != null) {
+              attribute = attribute.withSpent(spent);
+            } else {
+              attribute = attribute.reset();
+            }
+          }
+
+          this.previewAttributes.put(entry.getKey(), attribute);
         }
       }
-      this.previewSpentPoints = this.spentPoints;
+
       this.previewTotalPoints = this.availablePoints + this.spentPoints;
+      this.previewSpentPoints = Math.min(profile == null ? this.spentPoints : profile.getSpentPoints(), this.previewTotalPoints);
     } else {
       this.previewAttributes = null;
       this.previewSpentPoints = -1;

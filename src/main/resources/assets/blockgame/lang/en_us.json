@@ -136,8 +136,9 @@
 	"menu.blockgame.container.plunder": "Loot All",
 
 	"comment.13": "~~ Stat Profiles ~~",
-	"menu.blockgame.stats.cancel_preview": "Click to cancel attribute changes",
-	"menu.blockgame.stats.change_profile": "Click to change your profile",
-	"menu.blockgame.stats.preview": "Click to preview attribute changes",
+	"menu.blockgame.stats.cancel_preview": "Click to cancel profile changes",
+	"menu.blockgame.stats.save_profile": "Click to save and apply your profile",
+	"menu.blockgame.stats.create_profile": "Click to create a new profile",
+	"menu.blockgame.stats.delete_profile": "Click to delete this profile",
 	"menu.blockgame.stats.reallocate": "Click to reallocate your attributes"
 }

@@ -49,4 +49,24 @@ public class BlockgameData {
     BlockgameData.INSTANCE = null;
     BlockgameEnhanced.LOGGER.info("Blockgame data unloaded");
   }
+
+  public static void saveProfile(StatProfile profile) {
+    if (BlockgameData.INSTANCE == null) {
+      return;
+    }
+
+    BlockgameEnhanced.LOGGER.info("Saving profile: \"{}\"", profile.getName());
+    BlockgameData.INSTANCE.statProfiles.put(profile.getName(), profile);
+    BlockgameData.save();
+  }
+
+  public static void removeProfile(String name) {
+    if (BlockgameData.INSTANCE == null) {
+      return;
+    }
+
+    BlockgameEnhanced.LOGGER.info("Removing profile: \"{}\"", name);
+    BlockgameData.INSTANCE.statProfiles.remove(name);
+    BlockgameData.save();
+  }
 }

@@ -29,23 +29,27 @@ public class PlayerAttribute {
   private final int spent;
   private final Set<StatModifier> buffs;
   private final int cost;
-  private final int slot;
+  private final HashSet<Integer> slots;
   private final ItemStack itemStack;
   private final AttributeCategory category;
 
   public PlayerAttribute(String name, int max, int spent, Set<StatModifier> buffs, int cost, int slot, ItemStack itemStack) {
+    this(name, max, spent, buffs, cost, new HashSet<>(List.of(slot)), itemStack);
+  }
+
+  public PlayerAttribute(String name, int max, int spent, Set<StatModifier> buffs, int cost, HashSet<Integer> slots, ItemStack itemStack) {
     this.name = name;
     this.max = max;
     this.spent = spent;
     this.buffs = buffs;
     this.cost = cost;
-    this.slot = slot;
+    this.slots = slots;
     this.itemStack = itemStack;
     this.category = determineCategory(name);
   }
 
   public PlayerAttribute reset() {
-    return new PlayerAttribute(this.name, this.max, 0, this.buffs, this.cost, this.slot, this.itemStack);
+    return this.withSpent(0);
   }
 
   public PlayerAttribute adjust(int spentAmount) {
@@ -53,7 +57,15 @@ public class PlayerAttribute {
       return this;
     }
 
-    return new PlayerAttribute(this.name, this.max, this.spent + spentAmount, this.buffs, this.cost, this.slot, this.itemStack);
+    return new PlayerAttribute(this.name, this.max, this.spent + spentAmount, this.buffs, this.cost, this.slots, this.itemStack);
+  }
+
+  public PlayerAttribute withSpent(int spent) {
+    return new PlayerAttribute(this.name, this.max, spent, this.buffs, this.cost, this.slots, this.itemStack);
+  }
+
+  public int getFirstSlot() {
+    return slots.stream().findFirst().orElse(-1);
   }
 
   /**
@@ -88,6 +100,10 @@ public class PlayerAttribute {
     }
 
     itemStack.getOrCreateSubNbt("display").put("Lore", NbtHelper.buildLore(loreList));
+  }
+
+  public int getBarStep(float barWidth) {
+    return Math.round((float)spent * barWidth / (float)max);
   }
 
   public static @Nullable PlayerAttribute fromItem(ItemStack stack, int slot) {
@@ -178,10 +194,10 @@ public class PlayerAttribute {
 
   private AttributeCategory determineCategory(String name) {
     return switch (name) {
-      case "Ferocity", "Spartan", "Dexterity", "Alacrity", "Intelligence", "Precision", "Assassin", "Glass Cannon",
-           "Bravery", "Bullying", "Battleship", "Dreadnought" -> AttributeCategory.OFFENSE;
-      case "Wisdom", "Pacifist", "Volition", "Somatics", "Bloom", "Time Lord" -> AttributeCategory.SUPPORT;
-      case "Tenacity", "Shield Mastery", "Fortress", "Juggernaut", "Beef Cake", "Chunky Soup" -> AttributeCategory.DEFENSE;
+      case "Ferocity", "Spartan", "Dexterity", "Alacrity", "Intelligence", "Precision", "Glass Cannon",
+           "Bravery", "Bullying", "Assassin" -> AttributeCategory.OFFENSE;
+      case "Wisdom", "Pacifist", "Volition", "Somatics", "Bloom", "Time Lord", "Beef Cake", "Chunky Soup" -> AttributeCategory.SUPPORT;
+      case "Tenacity", "Shield Mastery", "Fortress", "Juggernaut", "Battleship", "Dreadnought" -> AttributeCategory.DEFENSE;
       default -> AttributeCategory.OTHER;
     };
   }
@@ -193,7 +209,7 @@ public class PlayerAttribute {
         this.spent,
         new HashSet<>(this.buffs),
         this.cost,
-        this.slot,
+        new HashSet<>(this.slots),
         this.itemStack.copy()
     );
   }

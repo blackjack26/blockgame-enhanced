@@ -26,12 +26,11 @@ public class StatProfileGameFeature extends GameFeature {
     ScreenReceivedInventoryEvent.EVENT.register(this::handleScreenReceivedInventory);
   }
 
-  @Override
-  public boolean isEnabled() {
-    return BlockgameEnhanced.getConfig().getStatConfig().enableEnhancedStats;
-  }
-
   private ActionResult handleScreenOpened(OpenScreenS2CPacket packet) {
+    if (!BlockgameEnhanced.getConfig().getStatConfig().enableEnhancedStats) {
+      return ActionResult.PASS;
+    }
+
     // Check if the screen is a 9x5 screen
     if (packet.getScreenHandlerType() != ScreenHandlerType.GENERIC_9X5) {
       return ActionResult.PASS;
@@ -49,6 +48,10 @@ public class StatProfileGameFeature extends GameFeature {
   }
 
   private ActionResult handleScreenReceivedInventory(InventoryS2CPacket packet) {
+    if (!BlockgameEnhanced.getConfig().getStatConfig().enableEnhancedStats) {
+      return ActionResult.PASS;
+    }
+
     int expectedSyncId = this.screenManager.getSyncId();
     if (expectedSyncId == -1 || packet.getSyncId() != expectedSyncId) {
       return ActionResult.PASS;

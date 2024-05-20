@@ -34,12 +34,10 @@ public class StatListWidget extends ScrollableViewWidget {
     ATTR_POSITIONS.put("Alacrity", new int[] { 1, 1 });
     ATTR_POSITIONS.put("Intelligence", new int[] { 2, 0 });
     ATTR_POSITIONS.put("Precision", new int[] { 2, 1 });
-    ATTR_POSITIONS.put("Assassin", new int[] { 3, 0 });
-    ATTR_POSITIONS.put("Glass Cannon", new int[] { 3, 1 });
-    ATTR_POSITIONS.put("Bravery", new int[] { 4, 0 });
-    ATTR_POSITIONS.put("Bullying", new int[] { 4, 1 });
-    ATTR_POSITIONS.put("Battleship", new int[] { 5, 0 });
-    ATTR_POSITIONS.put("Dreadnought", new int[] { 5, 1 });
+    ATTR_POSITIONS.put("Glass Cannon", new int[] { 3, 0 });
+    ATTR_POSITIONS.put("Bravery", new int[] { 3, 1 });
+    ATTR_POSITIONS.put("Bullying", new int[] { 4, 0 });
+    ATTR_POSITIONS.put("Assassin", new int[] { 4, 1 });
 
     // Support
     ATTR_POSITIONS.put("Wisdom", new int[] { 0, 0 });
@@ -48,14 +46,16 @@ public class StatListWidget extends ScrollableViewWidget {
     ATTR_POSITIONS.put("Somatics", new int[] { 1, 1 });
     ATTR_POSITIONS.put("Bloom", new int[] { 2, 0 });
     ATTR_POSITIONS.put("Time Lord", new int[] { 2, 1 });
+    ATTR_POSITIONS.put("Beef Cake", new int[] { 3, 0 });
+    ATTR_POSITIONS.put("Chunky Soup", new int[] { 3, 1 });
 
     // Defense
     ATTR_POSITIONS.put("Tenacity", new int[] { 0, 0 });
     ATTR_POSITIONS.put("Shield Mastery", new int[] { 0, 1 });
     ATTR_POSITIONS.put("Fortress", new int[] { 1, 0 });
     ATTR_POSITIONS.put("Juggernaut", new int[] { 1, 1 });
-    ATTR_POSITIONS.put("Beef Cake", new int[] { 2, 0 });
-    ATTR_POSITIONS.put("Chunky Soup", new int[] { 2, 1 });
+    ATTR_POSITIONS.put("Battleship", new int[] { 2, 0 });
+    ATTR_POSITIONS.put("Dreadnought", new int[] { 2, 1 });
   }
   private static final int ATTR_HEIGHT = 24;
 
